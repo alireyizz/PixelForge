@@ -1,0 +1,1985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="description"
+        content="PixelForge - Discover, share and download games and applications."
+    >
+
+    <meta name="theme-color" content="#111318">
+
+    <title>PixelForge</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================================
+         APP
+    ========================================== -->
+
+    <div id="app">
+
+        <!-- =====================================
+             LOADING SCREEN
+        ====================================== -->
+
+        <div id="loadingScreen" class="loading-screen">
+
+            <div class="loading-content">
+
+                <div class="loading-logo">
+                    <div class="logo-mark">P</div>
+
+                    <div class="logo-text">
+                        <strong>Pixel</strong>Forge
+                    </div>
+                </div>
+
+                <div class="loading-spinner"></div>
+
+                <p id="loadingStatus">
+                    Starting PixelForge...
+                </p>
+
+                <div class="loading-progress">
+                    <div
+                        id="loadingProgress"
+                        class="loading-progress-bar"
+                        style="width: 0%;"
+                    ></div>
+                </div>
+
+                <span id="loadingPercent">0%</span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             GLOBAL BACKDROP
+        ====================================== -->
+
+        <div
+            id="globalBackdrop"
+            class="global-backdrop"
+            aria-hidden="true"
+        ></div>
+
+
+        <!-- =====================================
+             SIDEBAR
+        ====================================== -->
+
+        <aside id="sidebar" class="sidebar">
+
+            <div class="sidebar-header">
+
+                <button
+                    class="brand"
+                    type="button"
+                    data-action="go-home"
+                    aria-label="PixelForge Home"
+                >
+                    <span class="brand-icon">P</span>
+
+                    <span class="brand-name">
+                        <strong>Pixel</strong>Forge
+                    </span>
+                </button>
+
+                <button
+                    class="sidebar-close"
+                    type="button"
+                    data-action="close-sidebar"
+                    aria-label="Close menu"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <!-- Main navigation -->
+
+            <nav class="sidebar-nav">
+
+                <div class="nav-section">
+
+                    <div class="nav-section-title">
+                        Discover
+                    </div>
+
+                    <button
+                        class="nav-item active"
+                        type="button"
+                        data-view="dashboard"
+                    >
+                        <span class="nav-icon">⌂</span>
+                        <span>Home</span>
+                    </button>
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-view="library"
+                    >
+                        <span class="nav-icon">▦</span>
+                        <span>Library</span>
+                    </button>
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-view="featured"
+                    >
+                        <span class="nav-icon">★</span>
+                        <span>Featured</span>
+                    </button>
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-view="categories"
+                    >
+                        <span class="nav-icon">◈</span>
+                        <span>Categories</span>
+                    </button>
+
+                </div>
+
+
+                <div class="nav-section">
+
+                    <div class="nav-section-title">
+                        PixelForge
+                    </div>
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-view="updates"
+                    >
+                        <span class="nav-icon">◷</span>
+                        <span>Updates</span>
+
+                        <span class="nav-badge">
+                            New
+                        </span>
+                    </button>
+
+                    <button
+                        class="nav-item"
+                        type="button"
+                        data-view="about"
+                    >
+                        <span class="nav-icon">ⓘ</span>
+                        <span>About</span>
+                    </button>
+
+                </div>
+
+            </nav>
+
+
+            <!-- Sidebar footer -->
+
+            <div class="sidebar-footer">
+
+                <div class="sidebar-status">
+
+                    <span class="status-dot"></span>
+
+                    <div>
+                        <strong>PixelForge Online</strong>
+                        <small>Everything is ready</small>
+                    </div>
+
+                </div>
+
+                <div class="sidebar-version">
+                    PixelForge v1.0
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================
+             MAIN
+        ====================================== -->
+
+        <main class="main-content">
+
+            <!-- =================================
+                 TOP BAR
+            ================================== -->
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        class="mobile-menu-button"
+                        type="button"
+                        data-action="open-sidebar"
+                        aria-label="Open menu"
+                    >
+                        ☰
+                    </button>
+
+                    <div class="breadcrumbs">
+
+                        <span>PixelForge</span>
+
+                        <span class="breadcrumb-separator">
+                            /
+                        </span>
+
+                        <strong id="breadcrumbCurrent">
+                            Home
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="topbar-actions">
+
+                    <button
+                        class="topbar-button search-button"
+                        type="button"
+                        data-action="open-search"
+                        aria-label="Search"
+                    >
+                        <span>⌕</span>
+                        <span class="search-label">
+                            Search
+                        </span>
+                        <kbd>Ctrl K</kbd>
+                    </button>
+
+
+                    <button
+                        id="notificationButton"
+                        class="topbar-icon-button"
+                        type="button"
+                        data-action="toggle-notifications"
+                        aria-label="Notifications"
+                        aria-expanded="false"
+                    >
+                        <span>♢</span>
+
+                        <span
+                            id="notificationDot"
+                            class="notification-dot"
+                        ></span>
+                    </button>
+
+
+                    <button
+                        class="topbar-icon-button"
+                        type="button"
+                        data-action="open-settings"
+                        aria-label="Settings"
+                    >
+                        ⚙
+                    </button>
+
+
+                    <div class="profile-wrapper">
+
+                        <button
+                            id="profileButton"
+                            class="profile-button"
+                            type="button"
+                            data-action="open-profile"
+                            aria-expanded="false"
+                        >
+
+                            <span class="profile-avatar">
+                                A
+                            </span>
+
+                            <span class="profile-info">
+                                <strong>PixelForge User</strong>
+                                <small>Explorer</small>
+                            </span>
+
+                            <span class="profile-arrow">
+                                ▾
+                            </span>
+
+                        </button>
+
+
+                        <div
+                            id="profileMenu"
+                            class="profile-menu"
+                            aria-hidden="true"
+                        >
+
+                            <div class="profile-menu-header">
+
+                                <div class="profile-avatar large">
+                                    A
+                                </div>
+
+                                <div>
+                                    <strong>PixelForge User</strong>
+                                    <span>Explorer</span>
+                                </div>
+
+                            </div>
+
+                            <div class="profile-menu-divider"></div>
+
+                            <button
+                                type="button"
+                                data-action="open-settings"
+                            >
+                                ⚙ Settings
+                            </button>
+
+                            <button
+                                type="button"
+                                data-action="open-about"
+                            >
+                                ⓘ About PixelForge
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================
+                 CONTENT ROOT
+            ================================== -->
+
+            <div
+                id="viewRoot"
+                class="page-container"
+                data-current-view="dashboard"
+            >
+
+
+                <!-- =================================
+                     DASHBOARD
+                ================================== -->
+
+                <section
+                    id="view-dashboard"
+                    class="view-panel active"
+                    data-view-panel="dashboard"
+                >
+
+                    <!-- Hero -->
+
+                    <section class="hero-section">
+
+                        <div class="hero-content">
+
+                            <span class="hero-eyebrow">
+                                WELCOME TO PIXELFORGE
+                            </span>
+
+                            <h1>
+                                Discover your next
+                                <span>favorite.</span>
+                            </h1>
+
+                            <p>
+                                Explore games and applications
+                                created by developers and the
+                                PixelForge community.
+                            </p>
+
+                            <div class="hero-actions">
+
+                                <button
+                                    class="primary-button"
+                                    type="button"
+                                    data-view-target="library"
+                                >
+                                    Explore Library
+                                    <span>→</span>
+                                </button>
+
+                                <button
+                                    class="secondary-button"
+                                    type="button"
+                                    data-action="open-search"
+                                >
+                                    Search
+                                    <span>⌕</span>
+                                </button>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="hero-visual">
+
+                            <div class="hero-orbit orbit-one"></div>
+                            <div class="hero-orbit orbit-two"></div>
+                            <div class="hero-orbit orbit-three"></div>
+
+                            <div class="hero-pixel pixel-one"></div>
+                            <div class="hero-pixel pixel-two"></div>
+                            <div class="hero-pixel pixel-three"></div>
+                            <div class="hero-pixel pixel-four"></div>
+
+                            <div class="hero-core">
+                                <span>PF</span>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- Quick stats -->
+
+                    <section class="stats-grid">
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon">
+                                🎮
+                            </div>
+
+                            <div>
+                                <span class="stat-label">
+                                    Games
+                                </span>
+
+                                <strong id="gameCount">
+                                    0
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon">
+                                💻
+                            </div>
+
+                            <div>
+                                <span class="stat-label">
+                                    Applications
+                                </span>
+
+                                <strong id="appCount">
+                                    0
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon">
+                                ★
+                            </div>
+
+                            <div>
+                                <span class="stat-label">
+                                    Featured
+                                </span>
+
+                                <strong id="featuredCount">
+                                    0
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat-card">
+
+                            <div class="stat-icon">
+                                ↓
+                            </div>
+
+                            <div>
+                                <span class="stat-label">
+                                    Downloads
+                                </span>
+
+                                <strong id="downloadCount">
+                                    0
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+
+                    <!-- Featured -->
+
+                    <section class="content-section">
+
+                        <div class="section-header">
+
+                            <div>
+                                <span class="section-eyebrow">
+                                    HAND PICKED
+                                </span>
+
+                                <h2>
+                                    Featured
+                                </h2>
+
+                                <p>
+                                    Projects worth checking out.
+                                </p>
+                            </div>
+
+                            <button
+                                class="text-button"
+                                type="button"
+                                data-view-target="featured"
+                            >
+                                View all
+                                <span>→</span>
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="featuredGames"
+                            class="game-grid featured-grid"
+                        >
+                        </div>
+
+                    </section>
+
+
+                    <!-- Games -->
+
+                    <section class="content-section">
+
+                        <div class="section-header">
+
+                            <div>
+                                <span class="section-eyebrow">
+                                    LATEST PROJECTS
+                                </span>
+
+                                <h2>
+                                    Games & Applications
+                                </h2>
+
+                                <p>
+                                    Fresh projects from PixelForge.
+                                </p>
+                            </div>
+
+                            <button
+                                class="text-button"
+                                type="button"
+                                data-view-target="library"
+                            >
+                                Open library
+                                <span>→</span>
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="dashboardGames"
+                            class="game-grid"
+                        >
+                        </div>
+
+                    </section>
+
+
+                    <!-- Updates -->
+
+                    <section class="content-section">
+
+                        <div class="section-header">
+
+                            <div>
+                                <span class="section-eyebrow">
+                                    WHAT'S NEW
+                                </span>
+
+                                <h2>
+                                    Latest Updates
+                                </h2>
+
+                                <p>
+                                    See what's happening on PixelForge.
+                                </p>
+                            </div>
+
+                            <button
+                                class="text-button"
+                                type="button"
+                                data-view-target="updates"
+                            >
+                                All updates
+                                <span>→</span>
+                            </button>
+
+                        </div>
+
+
+                        <div
+                            id="dashboardUpdates"
+                            class="updates-list"
+                        >
+                        </div>
+
+                    </section>
+
+                </section>
+
+
+                <!-- =================================
+                     LIBRARY
+                ================================== -->
+
+                <section
+                    id="view-library"
+                    class="view-panel"
+                    data-view-panel="library"
+                >
+
+                    <div class="page-heading">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                COLLECTION
+                            </span>
+
+                            <h1>
+                                Library
+                            </h1>
+
+                            <p>
+                                Browse games and applications
+                                available on PixelForge.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Filters -->
+
+                    <div class="library-toolbar">
+
+                        <div class="filter-group">
+
+                            <button
+                                class="filter-button active"
+                                type="button"
+                                data-filter="all"
+                            >
+                                All
+                            </button>
+
+                            <button
+                                class="filter-button"
+                                type="button"
+                                data-filter="game"
+                            >
+                                🎮 Games
+                            </button>
+
+                            <button
+                                class="filter-button"
+                                type="button"
+                                data-filter="application"
+                            >
+                                💻 Applications
+                            </button>
+
+                            <button
+                                class="filter-button"
+                                type="button"
+                                data-filter="featured"
+                            >
+                                ★ Featured
+                            </button>
+
+                        </div>
+
+
+                        <select
+                            id="gameSort"
+                            class="sort-select"
+                            aria-label="Sort library"
+                        >
+                            <option value="featured">
+                                Featured first
+                            </option>
+
+                            <option value="newest">
+                                Newest
+                            </option>
+
+                            <option value="name">
+                                Name
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <div
+                        id="libraryGames"
+                        class="game-grid library-grid"
+                    >
+                    </div>
+
+                    <div
+                        id="libraryEmpty"
+                        class="empty-state"
+                        hidden
+                    >
+                        <div class="empty-icon">
+                            ◌
+                        </div>
+
+                        <h3>
+                            Nothing found
+                        </h3>
+
+                        <p>
+                            Try another category or search term.
+                        </p>
+                    </div>
+
+                </section>
+
+
+                <!-- =================================
+                     UPDATES
+                ================================== -->
+
+                <section
+                    id="view-updates"
+                    class="view-panel"
+                    data-view-panel="updates"
+                >
+
+                    <div class="page-heading">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                CHANGELOG
+                            </span>
+
+                            <h1>
+                                Updates
+                            </h1>
+
+                            <p>
+                                The latest PixelForge news and releases.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="updatesTimeline"
+                        class="updates-timeline"
+                    >
+                    </div>
+
+                </section>
+
+
+                <!-- =================================
+                     FEATURED
+                ================================== -->
+
+                <section
+                    id="view-featured"
+                    class="view-panel"
+                    data-view-panel="featured"
+                >
+
+                    <div class="page-heading">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                EDITOR'S PICKS
+                            </span>
+
+                            <h1>
+                                Featured Projects
+                            </h1>
+
+                            <p>
+                                Interesting games and applications
+                                selected for the PixelForge front page.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="featuredPageGames"
+                        class="game-grid"
+                    >
+                    </div>
+
+                </section>
+
+
+                <!-- =================================
+                     CATEGORIES
+                ================================== -->
+
+                <section
+                    id="view-categories"
+                    class="view-panel"
+                    data-view-panel="categories"
+                >
+
+                    <div class="page-heading">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                EXPLORE
+                            </span>
+
+                            <h1>
+                                Categories
+                            </h1>
+
+                            <p>
+                                Find something that matches your interests.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="category-grid">
+
+                        <button
+                            class="category-card"
+                            type="button"
+                            data-category="action"
+                        >
+                            <span class="category-icon">
+                                ⚔
+                            </span>
+
+                            <strong>
+                                Action
+                            </strong>
+
+                            <small>
+                                Fast-paced games
+                            </small>
+                        </button>
+
+
+                        <button
+                            class="category-card"
+                            type="button"
+                            data-category="adventure"
+                        >
+                            <span class="category-icon">
+                                🗺
+                            </span>
+
+                            <strong>
+                                Adventure
+                            </strong>
+
+                            <small>
+                                Explore new worlds
+                            </small>
+                        </button>
+
+
+                        <button
+                            class="category-card"
+                            type="button"
+                            data-category="simulation"
+                        >
+                            <span class="category-icon">
+                                ◉
+                            </span>
+
+                            <strong>
+                                Simulation
+                            </strong>
+
+                            <small>
+                                Build and simulate
+                            </small>
+                        </button>
+
+
+                        <button
+                            class="category-card"
+                            type="button"
+                            data-category="utility"
+                        >
+                            <span class="category-icon">
+                                ⚙
+                            </span>
+
+                            <strong>
+                                Utilities
+                            </strong>
+
+                            <small>
+                                Useful applications
+                            </small>
+                        </button>
+
+
+                        <button
+                            class="category-card"
+                            type="button"
+                            data-category="creative"
+                        >
+                            <span class="category-icon">
+                                ✦
+                            </span>
+
+                            <strong>
+                                Creative
+                            </strong>
+
+                            <small>
+                                Tools for creators
+                            </small>
+                        </button>
+
+
+                        <button
+                            class="category-card"
+                            type="button"
+                            data-category="other"
+                        >
+                            <span class="category-icon">
+                                +
+                            </span>
+
+                            <strong>
+                                Other
+                            </strong>
+
+                            <small>
+                                More projects
+                            </small>
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================
+                     ABOUT
+                ================================== -->
+
+                <section
+                    id="view-about"
+                    class="view-panel"
+                    data-view-panel="about"
+                >
+
+                    <div class="about-page">
+
+                        <div class="about-logo">
+                            <span>PF</span>
+                        </div>
+
+                        <span class="section-eyebrow">
+                            ABOUT PIXELFORGE
+                        </span>
+
+                        <h1>
+                            Built for people who
+                            <span>create.</span>
+                        </h1>
+
+                        <p class="about-lead">
+                            PixelForge is a community platform for
+                            discovering, sharing and downloading
+                            games and applications.
+                        </p>
+
+
+                        <div class="about-cards">
+
+                            <div class="about-card">
+
+                                <span>🎮</span>
+
+                                <h3>
+                                    Discover
+                                </h3>
+
+                                <p>
+                                    Find games and applications
+                                    from the PixelForge community.
+                                </p>
+
+                            </div>
+
+
+                            <div class="about-card">
+
+                                <span>🚀</span>
+
+                                <h3>
+                                    Share
+                                </h3>
+
+                                <p>
+                                    Developers can bring their
+                                    own projects to the platform.
+                                </p>
+
+                            </div>
+
+
+                            <div class="about-card">
+
+                                <span>♥</span>
+
+                                <h3>
+                                    Support
+                                </h3>
+
+                                <p>
+                                    Like projects you enjoy and
+                                    help creators get noticed.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- =================================
+                 MOBILE NAV
+            ================================== -->
+
+            <nav class="mobile-nav">
+
+                <button
+                    class="mobile-nav-item active"
+                    type="button"
+                    data-view="dashboard"
+                >
+                    <span>⌂</span>
+                    <small>Home</small>
+                </button>
+
+                <button
+                    class="mobile-nav-item"
+                    type="button"
+                    data-view="library"
+                >
+                    <span>▦</span>
+                    <small>Library</small>
+                </button>
+
+                <button
+                    class="mobile-nav-item"
+                    type="button"
+                    data-view="featured"
+                >
+                    <span>★</span>
+                    <small>Featured</small>
+                </button>
+
+                <button
+                    class="mobile-nav-item"
+                    type="button"
+                    data-action="open-search"
+                >
+                    <span>⌕</span>
+                    <small>Search</small>
+                </button>
+
+            </nav>
+
+        </main>
+
+
+        <!-- =====================================
+             NOTIFICATION PANEL
+        ====================================== -->
+
+        <aside
+            id="notificationPanel"
+            class="notification-panel"
+            aria-hidden="true"
+        >
+
+            <div class="notification-header">
+
+                <div>
+
+                    <span class="section-eyebrow">
+                        PIXELFORGE
+                    </span>
+
+                    <h3>
+                        Notifications
+                    </h3>
+
+                </div>
+
+                <button
+                    type="button"
+                    data-action="close-notifications"
+                    aria-label="Close notifications"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div
+                id="notificationList"
+                class="notification-list"
+            >
+            </div>
+
+        </aside>
+
+
+        <!-- =====================================
+             SEARCH MODAL
+        ====================================== -->
+
+        <div
+            id="searchModal"
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-hidden="true"
+        >
+
+            <div class="modal-backdrop"></div>
+
+            <div class="modal-dialog search-dialog">
+
+                <div class="search-modal-header">
+
+                    <div class="search-modal-title">
+
+                        <span class="modal-icon">
+                            ⌕
+                        </span>
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                SEARCH PIXELFORGE
+                            </span>
+
+                            <h2>
+                                Find a project
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+                    <button
+                        class="modal-close"
+                        type="button"
+                        data-action="close-modal"
+                        aria-label="Close search"
+                    >
+                        ×
+                    </button>
+
+                </div>
+
+
+                <div class="search-input-wrapper">
+
+                    <span>
+                        ⌕
+                    </span>
+
+                    <input
+                        id="globalSearch"
+                        type="search"
+                        autocomplete="off"
+                        placeholder="Search games, applications, categories..."
+                    >
+
+                    <kbd>ESC</kbd>
+
+                </div>
+
+
+                <div class="search-results-header">
+                    Quick results
+                </div>
+
+
+                <div
+                    id="searchResults"
+                    class="search-results"
+                >
+                </div>
+
+
+                <div
+                    id="searchNoResults"
+                    class="search-no-results"
+                    hidden
+                >
+                    <span>⌕</span>
+
+                    <strong>
+                        No projects found
+                    </strong>
+
+                    <p>
+                        Try a different search term.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             GAME DETAILS MODAL
+        ====================================== -->
+
+        <div
+            id="gameDetailsModal"
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-hidden="true"
+        >
+
+            <div class="modal-backdrop"></div>
+
+            <div class="modal-dialog game-details-dialog">
+
+                <button
+                    class="modal-close floating-close"
+                    type="button"
+                    data-action="close-modal"
+                    aria-label="Close details"
+                >
+                    ×
+                </button>
+
+
+                <div
+                    id="gameDetailsCover"
+                    class="game-details-cover"
+                >
+
+                    <div class="details-cover-overlay">
+
+                        <span
+                            id="gameDetailsBadge"
+                            class="game-badge"
+                        >
+                            GAME
+                        </span>
+
+                        <div class="details-cover-icon">
+                            PF
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="game-details-content">
+
+                    <div class="game-details-heading">
+
+                        <div>
+
+                            <span class="section-eyebrow">
+                                PIXELFORGE PROJECT
+                            </span>
+
+                            <h2 id="gameDetailsTitle">
+                                Project
+                            </h2>
+
+                        </div>
+
+                        <button
+                            class="icon-action-button"
+                            type="button"
+                            data-action="game-menu"
+                            aria-label="More options"
+                        >
+                            ⋮
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        id="gameDetailsDescription"
+                        class="game-details-description"
+                    >
+                        Project description.
+                    </p>
+
+
+                    <div
+                        id="gameDetailsFeatures"
+                        class="feature-list"
+                    >
+                    </div>
+
+
+                    <div class="game-meta-grid">
+
+                        <div class="game-meta-item">
+
+                            <span>
+                                Version
+                            </span>
+
+                            <strong id="gameDetailsVersion">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="game-meta-item">
+
+                            <span>
+                                Platform
+                            </span>
+
+                            <strong id="gameDetailsPlatform">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="game-meta-item">
+
+                            <span>
+                                Category
+                            </span>
+
+                            <strong id="gameDetailsGenre">
+                                -
+                            </strong>
+
+                        </div>
+
+
+                        <div class="game-meta-item">
+
+                            <span>
+                                Info
+                            </span>
+
+                            <strong id="gameDetailsMeta">
+                                -
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="game-details-actions">
+
+                        <button
+                            class="primary-button large"
+                            type="button"
+                            data-action="open-download-from-details"
+                        >
+                            <span>↓</span>
+                            Download
+                        </button>
+
+                        <button
+                            class="secondary-button large"
+                            type="button"
+                            data-action="game-like"
+                        >
+                            <span>♥</span>
+                            <span class="details-like-text">
+                                Like
+                            </span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             DOWNLOAD MODAL
+        ====================================== -->
+
+        <div
+            id="downloadModal"
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-hidden="true"
+        >
+
+            <div class="modal-backdrop"></div>
+
+            <div class="modal-dialog download-dialog">
+
+                <button
+                    class="modal-close floating-close"
+                    type="button"
+                    data-action="close-modal"
+                    aria-label="Close download"
+                >
+                    ×
+                </button>
+
+
+                <div class="download-icon" id="downloadGameIcon">
+                    PF
+                </div>
+
+
+                <span class="section-eyebrow">
+                    READY TO DOWNLOAD
+                </span>
+
+                <h2 id="downloadTitle">
+                    Download Project
+                </h2>
+
+                <p>
+                    You're about to download
+                    <strong id="downloadGameName">
+                        Project
+                    </strong>.
+                </p>
+
+
+                <div class="download-info">
+
+                    <div>
+
+                        <span>
+                            Version
+                        </span>
+
+                        <strong id="downloadGameVersion">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            File
+                        </span>
+
+                        <strong id="downloadFileName">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div>
+
+                        <span>
+                            Size
+                        </span>
+
+                        <strong id="downloadFileSize">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="download-actions">
+
+                    <button
+                        class="secondary-button"
+                        type="button"
+                        data-action="close-modal"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        id="confirmDownloadButton"
+                        class="primary-button"
+                        type="button"
+                        data-action="confirm-download"
+                    >
+                        <span>↓</span>
+                        Download
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             SETTINGS MODAL
+        ====================================== -->
+
+        <div
+            id="settingsModal"
+            class="modal"
+            role="dialog"
+            aria-modal="true"
+            aria-hidden="true"
+        >
+
+            <div class="modal-backdrop"></div>
+
+            <div class="modal-dialog settings-dialog">
+
+                <button
+                    class="modal-close floating-close"
+                    type="button"
+                    data-action="close-modal"
+                    aria-label="Close settings"
+                >
+                    ×
+                </button>
+
+
+                <span class="section-eyebrow">
+                    PERSONALIZE
+                </span>
+
+                <h2>
+                    Settings
+                </h2>
+
+                <p class="settings-intro">
+                    Customize your PixelForge experience.
+                </p>
+
+
+                <div class="settings-list">
+
+                    <!-- Theme -->
+
+                    <div class="setting-item">
+
+                        <div>
+
+                            <strong>
+                                Theme
+                            </strong>
+
+                            <span>
+                                Choose the appearance of PixelForge.
+                            </span>
+
+                        </div>
+
+                        <select
+                            id="themeSelect"
+                            class="setting-select"
+                        >
+                            <option value="dark">
+                                Dark
+                            </option>
+
+                            <option value="light">
+                                Light
+                            </option>
+
+                            <option value="system">
+                                System
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <!-- Accent -->
+
+                    <div class="setting-item accent-setting">
+
+                        <div>
+
+                            <strong>
+                                Accent color
+                            </strong>
+
+                            <span>
+                                Choose your PixelForge accent.
+                            </span>
+
+                        </div>
+
+
+                        <div class="accent-options">
+
+                            <button
+                                type="button"
+                                class="accent-button violet active"
+                                data-accent="violet"
+                                aria-label="Violet"
+                            ></button>
+
+                            <button
+                                type="button"
+                                class="accent-button blue"
+                                data-accent="blue"
+                                aria-label="Blue"
+                            ></button>
+
+                            <button
+                                type="button"
+                                class="accent-button green"
+                                data-accent="green"
+                                aria-label="Green"
+                            ></button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Motion -->
+
+                    <div class="setting-item">
+
+                        <div>
+
+                            <strong>
+                                Reduced motion
+                            </strong>
+
+                            <span>
+                                Reduce animations and transitions.
+                            </span>
+
+                        </div>
+
+                        <label class="toggle">
+
+                            <input
+                                id="reducedMotionToggle"
+                                type="checkbox"
+                            >
+
+                            <span class="toggle-slider"></span>
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <div class="settings-footer">
+
+                    <button
+                        class="primary-button"
+                        type="button"
+                        data-action="close-modal"
+                    >
+                        Done
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             TOASTS
+        ====================================== -->
+
+        <div
+            id="toastContainer"
+            class="toast-container"
+            aria-live="polite"
+            aria-atomic="true"
+        ></div>
+
+
+        <!-- =====================================
+             TEMPLATES
+        ====================================== -->
+
+        <template id="gameCardTemplate">
+
+            <article
+                class="game-card"
+                data-game-card
+            >
+
+                <div
+                    class="game-card-cover"
+                    data-game-cover
+                >
+
+                    <div class="game-card-cover-content">
+
+                        <span
+                            class="game-card-type"
+                            data-game-type
+                        >
+                            GAME
+                        </span>
+
+                        <div
+                            class="game-card-logo"
+                            data-game-logo
+                        >
+                            PF
+                        </div>
+
+                    </div>
+
+
+                    <button
+                        class="game-like-button"
+                        type="button"
+                        data-action="game-like"
+                        aria-label="Like project"
+                    >
+                        <span>♥</span>
+
+                        <span
+                            class="game-like-count"
+                            data-like-count
+                        >
+                            0
+                        </span>
+
+                    </button>
+
+                </div>
+
+
+                <div class="game-card-content">
+
+                    <div class="game-card-title-row">
+
+                        <div>
+
+                            <h3 data-game-title>
+                                Project
+                            </h3>
+
+                            <span
+                                class="game-card-category"
+                                data-game-category
+                            >
+                                Category
+                            </span>
+
+                        </div>
+
+                        <span
+                            class="game-card-version"
+                            data-game-version
+                        >
+                            v1.0
+                        </span>
+
+                    </div>
+
+
+                    <p
+                        class="game-card-description"
+                        data-game-description
+                    >
+                        Project description.
+                    </p>
+
+
+                    <div class="game-card-footer">
+
+                        <button
+                            class="card-details-button"
+                            type="button"
+                            data-action="open-game-details"
+                        >
+                            Details
+                        </button>
+
+                        <button
+                            class="card-download-button"
+                            type="button"
+                            data-action="open-download"
+                        >
+                            <span>↓</span>
+                            Download
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </template>
+
+
+        <template id="updateItemTemplate">
+
+            <article
+                class="update-item"
+                data-update-item
+            >
+
+                <div class="update-icon">
+                    <span data-update-icon>
+                        +
+                    </span>
+                </div>
+
+                <div class="update-content">
+
+                    <div class="update-top">
+
+                        <span
+                            class="update-type"
+                            data-update-type
+                        >
+                            UPDATE
+                        </span>
+
+                        <time data-update-date>
+                            Today
+                        </time>
+
+                    </div>
+
+                    <h3 data-update-title>
+                        Update
+                    </h3>
+
+                    <p data-update-description>
+                        Update description.
+                    </p>
+
+                </div>
+
+            </article>
+
+        </template>
+
+
+        <template id="notificationTemplate">
+
+            <article
+                class="notification-item"
+                data-notification-item
+            >
+
+                <div
+                    class="notification-icon"
+                    data-notification-icon
+                >
+                    ✦
+                </div>
+
+                <div class="notification-content">
+
+                    <strong data-notification-title>
+                        Notification
+                    </strong>
+
+                    <p data-notification-message>
+                        Notification message.
+                    </p>
+
+                    <time data-notification-date>
+                        Just now
+                    </time>
+
+                </div>
+
+            </article>
+
+        </template>
+
+    </div>
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script src="app.js"></script>
+
+</body>
+</html>
