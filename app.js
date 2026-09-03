@@ -1,7 +1,6 @@
 /* =========================================================
    PIXELFORGE
    Main Application
-   Empty Catalog Edition
    ========================================================= */
 
 "use strict";
@@ -10,11 +9,6 @@ const PixelForgeApp = (() => {
 
     /* =====================================================
        GAME CATALOG
-       
-       IMPORTANT:
-       This starts EMPTY.
-       Games will be added later through the PixelForge
-       content system.
        ===================================================== */
 
     const games = [];
@@ -158,13 +152,11 @@ const PixelForgeApp = (() => {
                     }
 
                     if (progress) {
-
                         progress.style.width =
                             `${value}%`;
                     }
 
                     if (percent) {
-
                         percent.textContent =
                             `${value}%`;
                     }
@@ -257,8 +249,6 @@ const PixelForgeApp = (() => {
             view;
 
 
-        /* Hide all views */
-
         $$("[data-view-panel]")
             .forEach((panel) => {
 
@@ -268,14 +258,10 @@ const PixelForgeApp = (() => {
             });
 
 
-        /* Show selected view */
-
         target.classList.add(
             "active"
         );
 
-
-        /* Update navigation */
 
         $$("[data-view]")
             .forEach((item) => {
@@ -287,8 +273,6 @@ const PixelForgeApp = (() => {
             });
 
 
-        /* Update root */
-
         const root =
             $("#viewRoot");
 
@@ -298,8 +282,6 @@ const PixelForgeApp = (() => {
                 view;
         }
 
-
-        /* Breadcrumb */
 
         const breadcrumb =
             $("#breadcrumbCurrent");
@@ -402,8 +384,23 @@ const PixelForgeApp = (() => {
             return;
         }
 
-        menu.classList.toggle(
-            "open"
+        const isOpen =
+            menu.classList.toggle("open");
+
+        const button =
+            $("#profileButton");
+
+        if (button) {
+
+            button.setAttribute(
+                "aria-expanded",
+                String(isOpen)
+            );
+        }
+
+        menu.setAttribute(
+            "aria-hidden",
+            String(!isOpen)
         );
     }
 
@@ -417,6 +414,22 @@ const PixelForgeApp = (() => {
 
             menu.classList.remove(
                 "open"
+            );
+
+            menu.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+        }
+
+        const button =
+            $("#profileButton");
+
+        if (button) {
+
+            button.setAttribute(
+                "aria-expanded",
+                "false"
             );
         }
     }
@@ -664,10 +677,8 @@ const PixelForgeApp = (() => {
 
         if (noResults) {
 
-            noResults.style.display =
-                results.length
-                    ? "none"
-                    : "";
+            noResults.hidden =
+                results.length !== 0;
         }
 
 
@@ -677,6 +688,9 @@ const PixelForgeApp = (() => {
                 document.createElement(
                     "button"
                 );
+
+            item.type =
+                "button";
 
             item.className =
                 "search-result";
@@ -736,41 +750,66 @@ const PixelForgeApp = (() => {
                 state.currentFilter
                     .toLowerCase();
 
-            result =
-                result.filter((game) => {
 
-                    return (
-                        (
-                            game.platform ||
-                            ""
-                        )
-                            .toLowerCase() ===
-                        filter ||
+            if (filter === "featured") {
 
-                        (
-                            game.type ||
-                            ""
-                        )
-                            .toLowerCase() ===
-                        filter ||
-
-                        (
-                            game.category ||
-                            ""
-                        )
-                            .toLowerCase() ===
-                        filter ||
-
-                        (
-                            game.genres || []
-                        ).some(
-                            (genre) =>
-                                genre
-                                    .toLowerCase() ===
-                                filter
-                        )
+                result =
+                    result.filter(
+                        (game) =>
+                            Boolean(
+                                game.featured
+                            )
                     );
-                });
+
+            } else {
+
+                result =
+                    result.filter((game) => {
+
+                        const type =
+                            (
+                                game.type ||
+                                ""
+                            )
+                                .toLowerCase();
+
+                        const normalizedType =
+                            type === "app"
+                                ? "application"
+                                : type;
+
+
+                        return (
+                            (
+                                game.platform ||
+                                ""
+                            )
+                                .toLowerCase() ===
+                            filter ||
+
+                            normalizedType ===
+                            filter ||
+
+                            (
+                                game.category ||
+                                ""
+                            )
+                                .toLowerCase() ===
+                            filter ||
+
+                            (
+                                game.genres || []
+                            ).some(
+                                (genre) =>
+                                    String(
+                                        genre
+                                    )
+                                        .toLowerCase() ===
+                                    filter
+                            )
+                        );
+                    });
+            }
         }
 
 
@@ -783,10 +822,10 @@ const PixelForgeApp = (() => {
                 result.sort(
                     (a, b) =>
                         new Date(
-                            b.releaseDate
+                            b.releaseDate || 0
                         ) -
                         new Date(
-                            a.releaseDate
+                            a.releaseDate || 0
                         )
                 );
 
@@ -797,8 +836,12 @@ const PixelForgeApp = (() => {
 
                 result.sort(
                     (a, b) =>
-                        a.title.localeCompare(
-                            b.title
+                        String(
+                            a.title || ""
+                        ).localeCompare(
+                            String(
+                                b.title || ""
+                            )
                         )
                 );
 
@@ -812,10 +855,14 @@ const PixelForgeApp = (() => {
                 result.sort(
                     (a, b) =>
                         Number(
-                            b.featured
+                            Boolean(
+                                b.featured
+                            )
                         ) -
                         Number(
-                            a.featured
+                            Boolean(
+                                a.featured
+                            )
                         )
                 );
 
@@ -913,7 +960,7 @@ const PixelForgeApp = (() => {
 
         const title =
             card.querySelector(
-                ".game-card-title"
+                "[data-game-title], .game-card-title"
             );
 
         if (title) {
@@ -925,7 +972,7 @@ const PixelForgeApp = (() => {
 
         const category =
             card.querySelector(
-                ".game-card-category"
+                "[data-game-category], .game-card-category"
             );
 
         if (category) {
@@ -937,7 +984,7 @@ const PixelForgeApp = (() => {
 
         const description =
             card.querySelector(
-                ".game-card-description"
+                "[data-game-description], .game-card-description"
             );
 
         if (description) {
@@ -949,7 +996,7 @@ const PixelForgeApp = (() => {
 
         const version =
             card.querySelector(
-                ".game-card-version"
+                "[data-game-version], .game-card-version"
             );
 
         if (version) {
@@ -961,7 +1008,7 @@ const PixelForgeApp = (() => {
 
         const logo =
             card.querySelector(
-                ".game-card-logo"
+                "[data-game-logo], .game-card-logo"
             );
 
         if (logo) {
@@ -971,12 +1018,46 @@ const PixelForgeApp = (() => {
         }
 
 
+        const type =
+            card.querySelector(
+                "[data-game-type], .game-card-type"
+            );
+
+        if (type) {
+
+            type.textContent =
+                game.type || "GAME";
+        }
+
+
+        const cover =
+            card.querySelector(
+                "[data-game-cover], .game-card-cover"
+            );
+
+        if (
+            cover &&
+            game.cover
+        ) {
+
+            cover.style.backgroundImage =
+                `url("${String(game.cover).replace(/"/g, '\\"')}")`;
+
+            cover.classList.add(
+                "has-custom-cover"
+            );
+        }
+
+
         const likeButton =
             card.querySelector(
-                '[data-action="like-game"]'
+                '[data-action="game-like"], [data-action="like-game"]'
             );
 
         if (likeButton) {
+
+            likeButton.dataset.gameId =
+                game.id || "";
 
             const liked =
                 state.likedGames.includes(
@@ -993,6 +1074,17 @@ const PixelForgeApp = (() => {
                 String(liked)
             );
 
+            const icon =
+                likeButton.querySelector(
+                    "span"
+                );
+
+            if (icon) {
+
+                icon.textContent =
+                    liked ? "♥" : "♡";
+            }
+
             const count =
                 likeButton.querySelector(
                     "[data-like-count]"
@@ -1001,8 +1093,32 @@ const PixelForgeApp = (() => {
             if (count) {
 
                 count.textContent =
-                    liked ? "♥" : "♡";
+                    liked ? "1" : "0";
             }
+        }
+
+
+        const detailsButton =
+            card.querySelector(
+                '[data-action="open-game-details"]'
+            );
+
+        if (detailsButton) {
+
+            detailsButton.dataset.gameId =
+                game.id || "";
+        }
+
+
+        const downloadButton =
+            card.querySelector(
+                '[data-action="open-download"]'
+            );
+
+        if (downloadButton) {
+
+            downloadButton.dataset.gameId =
+                game.id || "";
         }
 
 
@@ -1024,6 +1140,7 @@ const PixelForgeApp = (() => {
                 data-game-id="${escapeHTML(game.id || "")}"
                 data-platform="${escapeHTML(game.platform || "")}"
                 data-category="${escapeHTML(game.category || "")}"
+                data-type="${escapeHTML(game.type || "")}"
             >
 
                 <div class="game-card-cover">
@@ -1040,6 +1157,24 @@ const PixelForgeApp = (() => {
 
                     </div>
 
+                    <button
+                        class="game-like-button"
+                        type="button"
+                        data-action="game-like"
+                        data-game-id="${escapeHTML(game.id || "")}"
+                        aria-label="Like project"
+                        aria-pressed="false"
+                    >
+                        <span>♡</span>
+
+                        <span
+                            class="game-like-count"
+                            data-like-count
+                        >
+                            0
+                        </span>
+                    </button>
+
                 </div>
 
 
@@ -1054,6 +1189,8 @@ const PixelForgeApp = (() => {
                             </h3>
 
                             <span class="game-card-category">
+                                ${escapeHTML(game.type || "Game")}
+                                •
                                 ${escapeHTML(game.category || "Other")}
                             </span>
 
@@ -1075,6 +1212,7 @@ const PixelForgeApp = (() => {
 
                         <button
                             class="card-details-button"
+                            type="button"
                             data-action="open-game-details"
                             data-game-id="${escapeHTML(game.id || "")}"
                         >
@@ -1083,9 +1221,11 @@ const PixelForgeApp = (() => {
 
                         <button
                             class="card-download-button"
+                            type="button"
                             data-action="open-download"
                             data-game-id="${escapeHTML(game.id || "")}"
                         >
+                            <span>↓</span>
                             Download
                         </button>
 
@@ -1200,6 +1340,14 @@ const PixelForgeApp = (() => {
         );
 
 
+        renderGameContainer(
+            "#featuredPageGames",
+            featuredGames,
+            "No featured projects",
+            "Featured projects will appear here when you add and feature them."
+        );
+
+
         updateGameStats();
     }
 
@@ -1269,7 +1417,7 @@ const PixelForgeApp = (() => {
 
         setText(
             "#gameDetailsPlatform",
-            game.platform
+            game.platform || "-"
         );
 
 
@@ -1277,23 +1425,43 @@ const PixelForgeApp = (() => {
             "#gameDetailsGenre",
             (
                 game.genres || []
-            ).join(", ")
+            ).join(", ") ||
+            game.category ||
+            "-"
         );
 
 
         setText(
             "#gameDetailsMeta",
-            `${game.status || "Released"} • ${game.releaseDate || ""}`
+            `${game.status || "Released"}${game.releaseDate ? ` • ${game.releaseDate}` : ""}`
         );
 
 
         const icon =
-            $("#gameDetailsIcon");
+            $("#gameDetailsIcon") ||
+            $(".details-cover-icon");
 
         if (icon) {
 
             icon.textContent =
                 game.icon || "PF";
+        }
+
+
+        const cover =
+            $("#gameDetailsCover");
+
+        if (
+            cover &&
+            game.cover
+        ) {
+
+            cover.style.backgroundImage =
+                `url("${String(game.cover).replace(/"/g, '\\"')}")`;
+
+            cover.classList.add(
+                "has-custom-cover"
+            );
         }
 
 
@@ -1327,9 +1495,72 @@ const PixelForgeApp = (() => {
         }
 
 
+        updateDetailsLikeButton();
+
         openModal(
             "gameDetailsModal"
         );
+    }
+
+
+    function updateDetailsLikeButton() {
+
+        const button =
+            $(
+                '#gameDetailsModal [data-action="game-like"], #gameDetailsModal [data-action="like-game"]'
+            );
+
+        if (!button || !state.selectedGame) {
+            return;
+        }
+
+
+        const liked =
+            state.likedGames.includes(
+                state.selectedGame.id
+            );
+
+
+        button.dataset.gameId =
+            state.selectedGame.id;
+
+
+        button.classList.toggle(
+            "liked",
+            liked
+        );
+
+
+        button.setAttribute(
+            "aria-pressed",
+            String(liked)
+        );
+
+
+        const text =
+            button.querySelector(
+                ".details-like-text"
+            );
+
+
+        if (text) {
+
+            text.textContent =
+                liked ? "Liked" : "Like";
+        }
+
+
+        const icon =
+            button.querySelector(
+                "span"
+            );
+
+
+        if (icon) {
+
+            icon.textContent =
+                liked ? "♥" : "♡";
+        }
     }
 
 
@@ -1391,6 +1622,16 @@ const PixelForgeApp = (() => {
             "#downloadGameIcon",
             game.icon || "PF"
         );
+
+
+        const button =
+            $('[data-action="confirm-download"]');
+
+        if (button) {
+
+            button.dataset.downloadUrl =
+                game.downloadUrl || "";
+        }
 
 
         openModal(
@@ -1529,6 +1770,8 @@ const PixelForgeApp = (() => {
 
 
         renderGames();
+
+        updateDetailsLikeButton();
     }
 
 
@@ -1541,19 +1784,31 @@ const PixelForgeApp = (() => {
         const gameCount =
             games.filter(
                 (game) =>
-                    game.type === "Game"
+                    String(
+                        game.type || ""
+                    ).toLowerCase() ===
+                    "game"
             ).length;
 
 
         const appCount =
             games.filter(
                 (game) =>
-                    game.type === "App"
+                    ["app", "application"].includes(
+                        String(
+                            game.type || ""
+                        ).toLowerCase()
+                    )
             ).length;
 
 
-        const total =
-            games.length;
+        const featuredCount =
+            games.filter(
+                (game) =>
+                    Boolean(
+                        game.featured
+                    )
+            ).length;
 
 
         const gameStats =
@@ -1564,8 +1819,8 @@ const PixelForgeApp = (() => {
             $("#appCount");
 
 
-        const totalStats =
-            $("#totalCount");
+        const featuredStats =
+            $("#featuredCount");
 
 
         const downloadStats =
@@ -1586,10 +1841,10 @@ const PixelForgeApp = (() => {
         }
 
 
-        if (totalStats) {
+        if (featuredStats) {
 
-            totalStats.textContent =
-                total;
+            featuredStats.textContent =
+                featuredCount;
         }
 
 
@@ -1666,57 +1921,57 @@ const PixelForgeApp = (() => {
 
                                 const type =
                                     item.querySelector(
-                                        ".update-type"
+                                        "[data-update-type], .update-type"
                                     );
 
                                 const title =
                                     item.querySelector(
-                                        "h3"
+                                        "[data-update-title], h3"
                                     );
 
                                 const description =
                                     item.querySelector(
-                                        "p"
+                                        "[data-update-description], p"
                                     );
 
                                 const date =
                                     item.querySelector(
-                                        "time"
+                                        "[data-update-date], time"
                                     );
 
                                 const icon =
                                     item.querySelector(
-                                        ".update-icon"
+                                        "[data-update-icon], .update-icon"
                                     );
 
 
                                 if (type) {
                                     type.textContent =
-                                        update.type;
+                                        update.type || "UPDATE";
                                 }
 
 
                                 if (title) {
                                     title.textContent =
-                                        update.title;
+                                        update.title || "";
                                 }
 
 
                                 if (description) {
                                     description.textContent =
-                                        update.description;
+                                        update.description || "";
                                 }
 
 
                                 if (date) {
                                     date.textContent =
-                                        update.date;
+                                        update.date || "";
                                 }
 
 
                                 if (icon) {
                                     icon.textContent =
-                                        update.icon;
+                                        update.icon || "+";
                                 }
                             }
 
@@ -1838,46 +2093,46 @@ const PixelForgeApp = (() => {
 
                         const icon =
                             item.querySelector(
-                                ".notification-icon"
+                                "[data-notification-icon], .notification-icon"
                             );
 
                         const title =
                             item.querySelector(
-                                "strong"
+                                "[data-notification-title], strong"
                             );
 
                         const text =
                             item.querySelector(
-                                "p"
+                                "[data-notification-message], p"
                             );
 
                         const time =
                             item.querySelector(
-                                "time"
+                                "[data-notification-date], time"
                             );
 
 
                         if (icon) {
                             icon.textContent =
-                                notification.icon;
+                                notification.icon || "✦";
                         }
 
 
                         if (title) {
                             title.textContent =
-                                notification.title;
+                                notification.title || "";
                         }
 
 
                         if (text) {
                             text.textContent =
-                                notification.text;
+                                notification.text || "";
                         }
 
 
                         if (time) {
                             time.textContent =
-                                notification.time;
+                                notification.time || "";
                         }
                     }
 
@@ -2028,6 +2283,42 @@ const PixelForgeApp = (() => {
 
 
         applySettings();
+    }
+
+
+    function changeAccent(accent) {
+
+        if (
+            !accent ||
+            ![
+                "violet",
+                "blue",
+                "green"
+            ].includes(accent)
+        ) {
+            return;
+        }
+
+
+        if (
+            state.settings.accent ===
+            accent
+        ) {
+            return;
+        }
+
+
+        state.settings.accent =
+            accent;
+
+
+        saveSettings();
+
+
+        showToast(
+            `Accent changed to ${accent}.`,
+            "success"
+        );
     }
 
 
@@ -2296,6 +2587,15 @@ const PixelForgeApp = (() => {
                 break;
 
 
+            case "game-like":
+
+                toggleLike(
+                    element.dataset.gameId
+                );
+
+                break;
+
+
             case "like-game":
 
                 toggleLike(
@@ -2332,6 +2632,35 @@ const PixelForgeApp = (() => {
             "click",
             (event) => {
 
+                /* -----------------------------------------
+                   ACCENT BUTTON
+                   Only actual accent buttons trigger this.
+                   ----------------------------------------- */
+
+                const accentElement =
+                    event.target.closest(
+                        "[data-accent]"
+                    );
+
+
+                if (accentElement) {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+                    changeAccent(
+                        accentElement.dataset.accent
+                    );
+
+                    return;
+                }
+
+
+                /* -----------------------------------------
+                   ACTION
+                   ----------------------------------------- */
+
                 const actionElement =
                     event.target.closest(
                         "[data-action]"
@@ -2353,6 +2682,10 @@ const PixelForgeApp = (() => {
                 }
 
 
+                /* -----------------------------------------
+                   VIEW
+                   ----------------------------------------- */
+
                 const viewElement =
                     event.target.closest(
                         "[data-view]"
@@ -2373,6 +2706,10 @@ const PixelForgeApp = (() => {
                 }
 
 
+                /* -----------------------------------------
+                   VIEW TARGET
+                   ----------------------------------------- */
+
                 const viewTarget =
                     event.target.closest(
                         "[data-view-target]"
@@ -2392,6 +2729,10 @@ const PixelForgeApp = (() => {
                     return;
                 }
 
+
+                /* -----------------------------------------
+                   SEARCH RESULT
+                   ----------------------------------------- */
 
                 const searchResult =
                     event.target.closest(
@@ -2419,6 +2760,10 @@ const PixelForgeApp = (() => {
                 }
 
 
+                /* -----------------------------------------
+                   CATEGORY
+                   ----------------------------------------- */
+
                 const category =
                     event.target.closest(
                         "[data-category]"
@@ -2426,6 +2771,8 @@ const PixelForgeApp = (() => {
 
 
                 if (category) {
+
+                    event.preventDefault();
 
                     selectCategory(
                         category.dataset.category
@@ -2435,6 +2782,33 @@ const PixelForgeApp = (() => {
                     return;
                 }
 
+
+                /* -----------------------------------------
+                   FILTER
+                   ----------------------------------------- */
+
+                const filter =
+                    event.target.closest(
+                        "[data-filter]"
+                    );
+
+
+                if (filter) {
+
+                    event.preventDefault();
+
+                    selectCategory(
+                        filter.dataset.filter
+                    );
+
+
+                    return;
+                }
+
+
+                /* -----------------------------------------
+                   MODAL BACKDROP
+                   ----------------------------------------- */
 
                 if (
                     event.target.matches(
@@ -2451,6 +2825,10 @@ const PixelForgeApp = (() => {
             }
         );
 
+
+        /* ---------------------------------------------
+           PROFILE OUTSIDE CLICK
+           --------------------------------------------- */
 
         document.addEventListener(
             "click",
@@ -2477,6 +2855,10 @@ const PixelForgeApp = (() => {
             }
         );
 
+
+        /* ---------------------------------------------
+           KEYBOARD
+           --------------------------------------------- */
 
         document.addEventListener(
             "keydown",
@@ -2525,6 +2907,10 @@ const PixelForgeApp = (() => {
         );
 
 
+        /* ---------------------------------------------
+           SEARCH
+           --------------------------------------------- */
+
         const searchInput =
             $("#globalSearch");
 
@@ -2543,6 +2929,10 @@ const PixelForgeApp = (() => {
         }
 
 
+        /* ---------------------------------------------
+           SORT
+           --------------------------------------------- */
+
         const sort =
             $("#gameSort");
 
@@ -2560,6 +2950,10 @@ const PixelForgeApp = (() => {
             );
         }
 
+
+        /* ---------------------------------------------
+           THEME
+           --------------------------------------------- */
 
         const theme =
             $("#themeSelect");
@@ -2580,6 +2974,10 @@ const PixelForgeApp = (() => {
         }
 
 
+        /* ---------------------------------------------
+           REDUCED MOTION
+           --------------------------------------------- */
+
         const reducedMotion =
             $("#reducedMotionToggle");
 
@@ -2597,53 +2995,6 @@ const PixelForgeApp = (() => {
                 }
             );
         }
-
-
-        $$("[data-accent]")
-            .forEach((button) => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        const accent =
-                            button.dataset.accent;
-
-
-                        if (!accent) {
-                            return;
-                        }
-
-
-                        state.settings.accent =
-                            accent;
-
-
-                        saveSettings();
-
-
-                        showToast(
-                            `Accent changed to ${accent}.`,
-                            "success"
-                        );
-                    }
-                );
-            });
-
-
-        $$("[data-filter]")
-            .forEach((button) => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        selectCategory(
-                            button.dataset.filter
-                        );
-                    }
-                );
-            });
     }
 
 
